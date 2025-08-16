@@ -29,10 +29,38 @@ namespace DevFreela.API.Controllers
         }
 
         // PUT api/projects/1234
-        [HttpPut("{ID}")]
+        [HttpPut("{id}")]
         public IActionResult Put(int id, UpdateProjectInputModel model)
         {
             return NoContent();
+        }
+        
+        // DELETE api/projects/1234
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            return NoContent();
+        }
+        
+        // PUT api/projects/1234/start
+        [HttpPut("{id}/start")]
+        public IActionResult Start(int id)
+        {
+            return NoContent();
+        }
+        
+        // PUT api/projects/1234/complete
+        [HttpPut("{id}/complete")]
+        public IActionResult Complete(int id)
+        {
+            return NoContent();
+        } 
+        
+        // POST api/projects/1234/comments
+        [HttpPost("{id}/comments")]
+        public IActionResult PostComments(int id, CreateProjectCommentInputModel model)
+        {
+            return Ok();
         }
         
     }
