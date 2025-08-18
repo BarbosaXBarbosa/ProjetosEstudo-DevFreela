@@ -1,5 +1,6 @@
 using DevFreela.API.Models.Config;
 using DevFreela.API.Models.InputModels;
+using DevFreela.API.Persistence;
 using DevFreela.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -10,10 +11,12 @@ namespace DevFreela.API.Controllers
     [Route("api/projects")]
     public class ProjectsController : ControllerBase
     {
+        private readonly DevFreelaDbContext _context;
         private readonly IConfigService _configService;
 
-        public ProjectsController(IConfigService configService)
+        public ProjectsController(IConfigService configService, DevFreelaDbContext context)
         {
+            _context = context;
             _configService = configService;
         }
 
