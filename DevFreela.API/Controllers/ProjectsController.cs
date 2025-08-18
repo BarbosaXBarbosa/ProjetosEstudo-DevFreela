@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using DevFreela.API.Models.InputModels;
 using DevFreela.API.Models.Config;
+using DevFreela.API.Models.InputModels;
+using DevFreela.API.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace DevFreela.API.Controllers
@@ -9,10 +10,11 @@ namespace DevFreela.API.Controllers
     [Route("api/projects")]
     public class ProjectsController : ControllerBase
     {
-        private readonly FreelanceTotalCostConfig _config;
-        public ProjectsController(IOptions<FreelanceTotalCostConfig> options)
+        private readonly IConfigService _configService;
+
+        public ProjectsController(IConfigService configService)
         {
-            _config = options.Value;
+            _configService = configService;
         }
 
         // GET api/projects?search=crm
@@ -33,12 +35,26 @@ namespace DevFreela.API.Controllers
         [HttpPost]
         public IActionResult Post(CreateProjectInputModel model)
         {
-            if(model.TotalCost < _config.Minimum || model.TotalCost > _config.Maximum)
+            var min = _configService.GetMinimumCost();
+            var max = _configService.GetMaximumCost();
+            if (model.TotalCost < min || model.TotalCost > max)
             {
-                return BadRequest($"The total cost must be between {_config.Minimum} and {_config.Maximum}.");
+                return BadRequest($"The total cost must be between {min} and {max}.");
             }
 
-            return CreatedAtAction(nameof(GetById), new { id=1}, model);
+            var commissionPercentage = _configService.GetPlatformCommission(); // ex: 0.10
+            var commissionValue = decimal.Round(model.TotalCost * commissionPercentage, 2);
+
+            var expirationDays = _configService.GetProposalExpirationDays();
+
+            var response = new
+            {
+                proposalExpiryDays = expirationDays,
+                commissionPercentage = commissionPercentage,
+                commissionValue = commissionValue
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id=1}, response);
         }
 
         // PUT api/projects/1234
