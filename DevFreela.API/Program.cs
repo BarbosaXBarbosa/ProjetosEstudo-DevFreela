@@ -1,3 +1,4 @@
+using DevFreela.API.ExceptionHandler;
 using DevFreela.API.Models.Config;
 using DevFreela.API.Services;
 
@@ -13,6 +14,9 @@ builder.Services.Configure<PlatformConfig>(
 // registra o service que unifica configs
 builder.Services.AddScoped<IConfigService, ConfigService>();
 
+builder.Services.AddExceptionHandler<ApiExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -26,6 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
