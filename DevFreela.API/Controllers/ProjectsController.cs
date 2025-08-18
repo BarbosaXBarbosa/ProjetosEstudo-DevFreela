@@ -1,12 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using DevFreela.API.Models.InputModels;
+using DevFreela.API.Models.Config;
+using Microsoft.Extensions.Options;
 
 namespace DevFreela.API.Controllers
 {
     [ApiController]
-    [Route("[api/projects]")]
+    [Route("api/projects")]
     public class ProjectsController : ControllerBase
     {
+        private readonly FreelanceTotalCostConfig _config;
+        public ProjectsController(IOptions<FreelanceTotalCostConfig> options)
+        {
+            _config = options.Value;
+        }
+
         // GET api/projects?search=crm
         [HttpGet]
         public IActionResult Get(string search)
@@ -25,6 +33,11 @@ namespace DevFreela.API.Controllers
         [HttpPost]
         public IActionResult Post(CreateProjectInputModel model)
         {
+            if(model.TotalCost < _config.Minimum || model.TotalCost > _config.Maximum)
+            {
+                return BadRequest($"The total cost must be between {_config.Minimum} and {_config.Maximum}.");
+            }
+
             return CreatedAtAction(nameof(GetById), new { id=1}, model);
         }
 

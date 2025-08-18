@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevFreela.API.Controllers
 {
     [ApiController]
-    [Route("[api/users]")]
+    [Route("api/users")]
     public class UsersController : ControllerBase
     {
         [HttpPost]
