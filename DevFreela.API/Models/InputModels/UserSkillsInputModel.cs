@@ -2,7 +2,7 @@
 {
     public class UserSkillsInputModel
     {
-        public int[] SkillIds { get; private set; }
-        public int Id { get; private set; }
+        public int[] SkillIds { get; set; }
+        public int Id { get; set; }
     }
 }

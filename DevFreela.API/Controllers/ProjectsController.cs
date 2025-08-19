@@ -51,7 +51,7 @@ namespace DevFreela.API.Controllers
                 return NotFound();
             }
             
-            var model = ProjectItemViewModel.FromEntity(project);
+            var model = ProjectViewModel.FromEntity(project);
             
             return Ok(model);
         }

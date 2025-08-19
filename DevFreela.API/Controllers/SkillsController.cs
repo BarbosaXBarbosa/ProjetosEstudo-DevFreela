@@ -21,7 +21,7 @@ namespace DevFreela.API.Controllers
                .Select(s => new SkillViewModel(
                    s.Id,
                    s.Description,
-                   s.UserSkills.Count // EF traduz para COUNT
+                   s.UserSkills.Count 
                ))
                .OrderBy(s => s.Description)
                .ToList();
