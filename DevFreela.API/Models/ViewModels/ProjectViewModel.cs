@@ -5,6 +5,7 @@ namespace DevFreela.API.Models.ViewModels
     public class ProjectViewModel
     {
         public ProjectViewModel(int id, string title, string description, int idClient, string clientName, int idFreelancer, string freelancerName, decimal totalCost, DateTime? startedAt, DateTime? completedAt, List<ProjectComment> comments)
+            :base()
         {
             Id = id;
             Title = title;

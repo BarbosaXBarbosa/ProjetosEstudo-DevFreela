@@ -45,15 +45,39 @@ namespace DevFreela.API.Controllers
         }
 
         [HttpPut("{id}/skills")]
-        public IActionResult PostSkills(int id, UserSkillsInputModel model)
+        public IActionResult UpdateSkills(int id, UpdateUserSkillInputModel model)
         {
-            var userSkills = model.SkillIds.Select(s => new UserSkill(id, s))
+            var user = _context.Users.SingleOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            // Obter skills atuais do usuário
+            var currentUserSkills = _context.UserSkills
+                .Where(us => us.IdUser == id)
                 .ToList();
 
-            _context.UserSkills.AddRange(userSkills);
+            // Identificar skills para remover (as que não estão na nova lista)
+            var newSkillIds = model.SkillIds ?? Array.Empty<int>();
+            var skillsToRemove = currentUserSkills
+                .Where(us => !newSkillIds.Contains(us.IdSkill))
+                .ToList();
+
+            // Identificar novas skills para adicionar
+            var existingSkillIds = currentUserSkills.Select(us => us.IdSkill);
+            var skillsToAdd = newSkillIds
+                .Except(existingSkillIds)
+                .Select(skillId => new UserSkill(id, skillId))
+                .ToList();
+
+            // Aplicar mudanças
+            _context.UserSkills.RemoveRange(skillsToRemove);
+            _context.UserSkills.AddRange(skillsToAdd);
+
             _context.SaveChanges();
 
-            return Ok();
+            return NoContent(); 
         }
 
         [HttpPut("{id}/profile-picture")]

@@ -1,3 +1,4 @@
+using DevFreela.API.Entities;
 using DevFreela.API.Models.InputModels;
 using DevFreela.API.Models.ViewModels;
 using DevFreela.API.Persistence;
@@ -17,14 +18,8 @@ namespace DevFreela.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var skills = _context.Skills
-               .Select(s => new SkillViewModel(
-                   s.Id,
-                   s.Description,
-                   s.UserSkills.Count 
-               ))
-               .OrderBy(s => s.Description)
-               .ToList();
+            var skills = _context.Skills.ToList();
+            var model = skills.Select(SkillViewModel.FromEntity).ToList();
 
             return Ok(skills);
         }
