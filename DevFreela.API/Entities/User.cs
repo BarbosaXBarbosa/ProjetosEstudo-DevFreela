@@ -2,13 +2,17 @@
 {
     public class User : BaseEntity
     {
-        public User(string fullName, string email, DateTime birthDate, bool active, string password, string role)
+        protected User() // EF Core constructor
+        {
+
+        }
+        public User(string fullName, string email, DateTime birthDate, string password)
             : base()
         {
             FullName = fullName;
             Email = email;
             BirthDate = birthDate;
-            Active = active;
+            Active = true;
             Password = password;
 
             Skills = new List<UserSkill>();

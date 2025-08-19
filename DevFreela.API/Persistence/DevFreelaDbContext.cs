@@ -13,6 +13,7 @@ namespace DevFreela.API.Persistence
         public DbSet<User> Users { get; set; }
         public DbSet<ProjectComment> ProjectComments { get; set; }
         public DbSet<UserSkill> UserSkills { get; set; }
+        public DbSet<Skill> Skills { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -30,6 +31,12 @@ namespace DevFreela.API.Persistence
                         .WithMany(u => u.UserSkills)
                         .HasForeignKey(s => s.IdSkill)
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+            builder
+                .Entity<Skill>(e =>
+                {
+                    e.HasKey(s => s.Id);
+                    e.HasIndex(s => s.Description).IsUnique();
                 });
 
             builder

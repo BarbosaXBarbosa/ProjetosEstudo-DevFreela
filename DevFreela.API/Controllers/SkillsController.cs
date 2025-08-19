@@ -1,4 +1,5 @@
 using DevFreela.API.Models.InputModels;
+using DevFreela.API.Models.ViewModels;
 using DevFreela.API.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,16 +17,28 @@ namespace DevFreela.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var skills = _context.UserSkills
-                .ToList();
-            return Ok();
+            var skills = _context.Skills
+               .Select(s => new SkillViewModel(
+                   s.Id,
+                   s.Description,
+                   s.UserSkills.Count // EF traduz para COUNT
+               ))
+               .OrderBy(s => s.Description)
+               .ToList();
+
+            return Ok(skills);
         }
 
         [HttpPost]
 
         public IActionResult Post(CreateSkillInputModel model)
         {
-            return Ok();
+            var skill = new Entities.Skill(model.Description);
+
+            _context.Skills.Add(skill);
+            _context.SaveChanges();
+
+            return NoContent();
         }
 
     } 
