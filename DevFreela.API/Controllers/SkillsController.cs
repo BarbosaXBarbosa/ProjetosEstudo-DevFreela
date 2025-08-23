@@ -21,7 +21,7 @@ namespace DevFreela.API.Controllers
             var skills = _context.Skills.ToList();
             var model = skills.Select(SkillViewModel.FromEntity).ToList();
 
-            return Ok(skills);
+            return Ok(model);
         }
 
         [HttpPost]
