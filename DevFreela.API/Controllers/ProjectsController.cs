@@ -1,12 +1,9 @@
-using DevFreela.API.Entities;
-using DevFreela.API.Models.Config;
-using DevFreela.API.Models.InputModels;
-using DevFreela.API.Models.ViewModels;
-using DevFreela.API.Persistence;
-using DevFreela.API.Services;
+using DevFreela.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using DevFreela.Infrastructure.Persistence;
+using DevFreela.Application.Models.ViewModels;
+using DevFreela.Application.Models.InputModels;
 
 namespace DevFreela.API.Controllers
 {
@@ -15,12 +12,10 @@ namespace DevFreela.API.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly DevFreelaDbContext _context;
-        private readonly IConfigService _configService;
 
-        public ProjectsController(IConfigService configService, DevFreelaDbContext context)
+        public ProjectsController(DevFreelaDbContext context)
         {
             _context = context;
-            _configService = configService;
         }
 
         // GET api/projects?search=crm
@@ -60,7 +55,7 @@ namespace DevFreela.API.Controllers
         [HttpPost]
         public IActionResult Post(CreateProjectInputModel model)
         {
-            var min = _configService.GetMinimumCost();
+            /*var min = _configService.GetMinimumCost();
             var max = _configService.GetMaximumCost();
             if (model.TotalCost < min || model.TotalCost > max)
             {
@@ -77,13 +72,13 @@ namespace DevFreela.API.Controllers
                 proposalExpiryDays = expirationDays,
                 commissionPercentage = commissionPercentage,
                 commissionValue = commissionValue
-            };
+            };*/
             var project = model.ToEntity();
             _context.Projects.Add(project);
             _context.SaveChanges();
             
             
-            return CreatedAtAction(nameof(GetById), new { id=1}, response);
+            return CreatedAtAction(nameof(GetById), new { id=1}, project);
         }
 
         // PUT api/projects/1234
@@ -95,13 +90,13 @@ namespace DevFreela.API.Controllers
             {
                 return NotFound();
             }
-            
+            /*
             var min = _configService.GetMinimumCost();
             var max = _configService.GetMaximumCost();
             if (model.TotalCost < min || model.TotalCost > max)
             {
                 return BadRequest($"The total cost must be between {min} and {max}.");
-            }
+            }*/
             
             project.Update(model.Title, model.Description, model.TotalCost);
             

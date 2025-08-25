@@ -1,7 +1,6 @@
-using DevFreela.API.Entities;
-using DevFreela.API.Models.InputModels;
-using DevFreela.API.Models.ViewModels;
-using DevFreela.API.Persistence;
+using DevFreela.Application.Models.InputModels;
+using DevFreela.Application.Models.ViewModels;
+using DevFreela.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.API.Controllers
@@ -28,7 +27,7 @@ namespace DevFreela.API.Controllers
 
         public IActionResult Post(CreateSkillInputModel model)
         {
-            var skill = new Entities.Skill(model.Description);
+            var skill = new Core.Entities.Skill(model.Description);
 
             _context.Skills.Add(skill);
             _context.SaveChanges();

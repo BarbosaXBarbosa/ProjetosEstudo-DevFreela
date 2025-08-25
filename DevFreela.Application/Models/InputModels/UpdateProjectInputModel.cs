@@ -1,4 +1,4 @@
-namespace DevFreela.API.Models.InputModels;
+namespace DevFreela.Application.Models.InputModels;
 
 public class UpdateProjectInputModel
 {

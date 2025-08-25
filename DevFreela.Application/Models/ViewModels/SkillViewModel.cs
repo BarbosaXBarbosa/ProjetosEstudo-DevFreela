@@ -1,4 +1,4 @@
-namespace DevFreela.API.Models.ViewModels
+namespace DevFreela.Application.Models.ViewModels
 {
     public class SkillViewModel
     {
@@ -13,7 +13,7 @@ namespace DevFreela.API.Models.ViewModels
         public string Description { get; private set; }
         public int UsersCount { get; private set; }
         
-        public static SkillViewModel FromEntity(Entities.Skill skill)
+        public static SkillViewModel FromEntity(Core.Entities.Skill skill)
         {
             return new SkillViewModel(
                 skill.Id,
