@@ -1,3 +1,6 @@
+using DevFreela.Core.Entities;
+using System.Net.Sockets;
+
 namespace DevFreela.Application.Models.InputModels;
 
 public class CreateProjectCommentInputModel
